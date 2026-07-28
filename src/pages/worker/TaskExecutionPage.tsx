@@ -85,7 +85,7 @@ export function TaskExecutionPage() {
     }
     setSubmitting(true);
     try {
-      const path = `complaints/${complaint.id}/after-${Date.now()}-${afterFile.name}`;
+      const path = `${complaint.id}/after-${Date.now()}-${afterFile.name}`;
       const url = await uploadImage('complaints', path, afterFile);
       await completeWork(complaint.id, profile.id, url, notes);
       toast.success('Task completed', 'The complaint has been marked resolved.');

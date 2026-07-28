@@ -103,7 +103,7 @@ export function CreateComplaintPage() {
     try {
       let imageUrl = '';
       if (file) {
-        const path = `complaints/${profile.id}/${Date.now()}-${file.name}`;
+        const path = `${profile.id}/${Date.now()}-${file.name}`;
         imageUrl = await uploadImage('complaints', path, file);
       }
       const dept = departments.find((d) => d.slug === analysis.department_slug) ?? null;
