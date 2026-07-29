@@ -1,226 +1,306 @@
-# JanSetu AI — Smart Civic Management Platform
+# 🚀 JanSetu AI
 
-An AI-powered municipal complaint management platform where citizens report civic issues with photos + GPS, an AI engine auto-classifies the problem (category, severity, priority, department), and municipal officers and field workers manage the complaint lifecycle end-to-end.
+> **AI-Powered Smart Civic Complaint Management Platform**
 
-Built for a national-level Smart City hackathon.
+JanSetu AI is an intelligent municipal complaint management platform designed to modernize civic issue reporting and resolution. Citizens can report issues using photos and GPS location, while an AI-powered engine automatically classifies complaints, predicts severity and priority, recommends the responsible department, detects duplicate complaints, and enables authorities to resolve issues efficiently through a role-based workflow.
 
----
-
-## Features
-
-### Citizens
-- Report a civic issue with photo upload + GPS location picker
-- AI auto-detects: complaint category, severity, priority, recommended department
-- AI generates complaint title, description, and summary
-- Duplicate complaint detection (same category within 200m / 48h)
-- Track complaint status with a full timeline
-- Leave feedback (star rating + note) on resolved complaints
-- Real-time notifications on status changes
-
-### Municipal Admin
-- Municipal-wide dashboard with live stats and charts
-- Analytics: complaint trends, department performance, ward reports, worker efficiency
-- Manage all users (change roles, activate/deactivate)
-- Manage departments and assign field workers
-- Interactive complaint map with heatmap
-
-### Department Officers
-- Department-scoped dashboard with a department switcher
-- View and assign complaints to field workers
-- Update complaint status, reject with reason
-- Department analytics (by category, ward, status)
-
-### Field Workers
-- View assigned tasks
-- Start a task (marks in-progress)
-- Navigate to complaint location via maps
-- Upload before/after photos
-- Add completion notes and mark resolved
-
-### Platform
-- 13 complaint categories across 7 departments
-- JWT authentication with role-based access control
-- Real-time notifications via Supabase Realtime
-- Dark / light mode
-- Fully responsive (mobile → desktop)
-- Glassmorphism cards, animated landing page, loading skeletons, toast notifications
-- CSV export of complaints
-- 404 page
+🏆 Built for **AI FIRST HACKATHON 2026**
 
 ---
 
-## Tech Stack
+# 🌐 Live Project
+
+## 🚀 Live MVP
+https://jan-setu-ai-one.vercel.app/
+
+## 🎥 Demo Video
+https://www.loom.com/share/0798525d52444c8e9c4935a12c81c900
+
+## 💻 GitHub Repository
+https://github.com/Ashutosh17sy/JanSetu-AI
+
+---
+
+# 📌 Problem Statement
+
+Municipal corporations receive thousands of civic complaints every day, including garbage overflow, potholes, water leakage, broken streetlights, damaged public property, and sewer issues.
+
+Most existing complaint systems rely heavily on manual classification and routing, leading to:
+
+- Slow complaint processing
+- Duplicate complaints
+- Incorrect department assignment
+- Lack of transparency
+- Poor citizen experience
+
+JanSetu AI solves these challenges through intelligent AI-assisted complaint management.
+
+---
+
+# 💡 Solution
+
+JanSetu AI provides an end-to-end digital complaint management ecosystem where:
+
+- Citizens submit complaints using photos and GPS.
+- AI automatically analyzes the complaint.
+- Appropriate departments receive complaints instantly.
+- Officers assign field workers.
+- Workers resolve issues and upload completion evidence.
+- Citizens receive real-time updates and provide feedback.
+
+---
+
+# ✨ Key Features
+
+## 👤 Citizen
+
+- Register & Login
+- Photo Upload
+- GPS Location Selection
+- AI Complaint Classification
+- AI Generated Complaint Summary
+- Duplicate Complaint Detection
+- Complaint Timeline
+- Live Status Tracking
+- Feedback & Ratings
+- Real-time Notifications
+
+---
+
+## 🏛 Municipal Administrator
+
+- Dashboard Analytics
+- Complaint Statistics
+- User Management
+- Department Management
+- Worker Management
+- Complaint Heatmap
+- Performance Analytics
+- CSV Export
+
+---
+
+## 👮 Department Officer
+
+- Department Dashboard
+- Assign Workers
+- Complaint Management
+- Status Updates
+- Department Analytics
+
+---
+
+## 👷 Field Worker
+
+- Assigned Tasks
+- Navigation Support
+- Before/After Image Upload
+- Completion Notes
+- Mark Complaint Resolved
+
+---
+
+# 🤖 AI Capabilities
+
+JanSetu AI includes an intelligent AI complaint analysis engine that automatically performs:
+
+- Complaint Category Detection
+- Severity Prediction
+- Priority Prediction
+- Department Recommendation
+- AI Generated Title
+- AI Generated Description
+- Duplicate Complaint Detection
+
+The AI engine currently supports **13 civic complaint categories** mapped across **7 municipal departments**.
+
+---
+
+# 🏗 System Architecture
+
+```
+Citizen
+     │
+     ▼
+React + Vite Frontend
+     │
+     ▼
+Supabase Backend
+(Auth • PostgreSQL • Storage • Realtime)
+     │
+     ▼
+AI Analysis Engine
+(Category • Severity • Priority • Department)
+     │
+     ▼
+Department Officer
+     │
+     ▼
+Field Worker
+     │
+     ▼
+Citizen Feedback
+```
+
+---
+
+# 🔄 Workflow
+
+```
+Citizen
+     │
+Upload Complaint
+     │
+Photo + GPS
+     │
+AI Analysis
+     │
+Category
+Severity
+Priority
+Department
+Duplicate Detection
+     │
+Complaint Created
+     │
+Officer Assignment
+     │
+Worker Execution
+     │
+Complaint Resolution
+     │
+Citizen Feedback
+```
+
+---
+
+# 👥 User Roles
+
+1. Citizen
+2. Municipal Administrator
+3. Department Officer
+4. Field Worker
+
+---
+
+# 🛠 Technology Stack
 
 | Layer | Technology |
-|-------|-----------|
-| Frontend | React 18, Vite, TypeScript, Tailwind CSS, React Router, Framer Motion, React Hook Form, Recharts, React-Leaflet |
-| Backend / Database | Supabase (PostgreSQL, Auth, Realtime, Storage, Edge Functions) |
-| AI Analysis | Serverless Edge Function (Deno) with a rule-based classification engine |
-| Maps | Leaflet + OpenStreetMap (no API key required) |
+|-------|------------|
+| Frontend | React 18, Vite, TypeScript |
+| UI | Tailwind CSS, Framer Motion |
+| Backend | Supabase |
+| Database | PostgreSQL |
+| Authentication | Supabase Auth |
+| Storage | Supabase Storage |
+| Realtime | Supabase Realtime |
+| AI Engine | Deno Edge Functions |
+| Maps | React Leaflet + OpenStreetMap |
+| Charts | Recharts |
 
 ---
 
-## User Roles
+# 📂 Project Structure
 
-1. **Citizen** — reports and tracks civic issues
-2. **Municipal Admin** — oversees all operations, users, departments
-3. **Department Officer** — manages complaints within a department
-4. **Field Worker** — executes assigned tasks in the field
+```
+src/
+ ├── components/
+ ├── hooks/
+ ├── layouts/
+ ├── pages/
+ ├── services/
+ ├── App.tsx
+
+supabase/
+ ├── functions/
+ └── migrations/
+```
 
 ---
 
-## Complaint Categories
+# 🔒 Security
 
-Garbage Collection, Illegal Dumping, Road Potholes, Broken Roads, Broken Traffic Lights, Street Light Issues, Water Leakage, Sewer Overflow, Open Manholes, Construction Debris, Public Property Damage, Fallen Trees, Other Civic Issues.
+- JWT Authentication
+- Role Based Access Control
+- Row Level Security (RLS)
+- Protected Routes
+- Secure Storage Policies
 
 ---
 
-## Getting Started
+# 🚀 Getting Started
 
-### Prerequisites
-- Node.js 18+
-- npm
+## Install
 
-### Installation
 ```bash
 npm install
 ```
 
-### Environment Variables
-The project uses Supabase. The following are pre-populated in `.env`:
+## Environment Variables
 
-```
-VITE_SUPABASE_URL=<your-supabase-url>
-VITE_SUPABASE_ANON_KEY=<your-supabase-anon-key>
+```env
+VITE_SUPABASE_URL=YOUR_URL
+VITE_SUPABASE_ANON_KEY=YOUR_KEY
 ```
 
-### Development
+## Run
+
 ```bash
 npm run dev
 ```
 
-### Build
-```bash
-npm run build
-```
-
-### Type Check
-```bash
-npm run typecheck
-```
-
----
-
-## Project Structure
-
-```
-src/
-├── components/
-│   ├── ui/              # Reusable UI primitives (Button, Card, Input, Modal, etc.)
-│   ├── dashboard/       # Sidebar, Topbar, nav config
-│   ├── landing/         # Landing page sections
-│   ├── complaints/      # ComplaintCard, ComplaintList
-│   └── maps/            # Leaflet map components
-├── hooks/               # useAuth, useTheme, useToast, useNotifications, useMediaQuery
-├── layouts/             # AuthLayout, DashboardLayout
-├── pages/
-│   ├── auth/            # Login, Signup, Forgot/Reset Password
-│   ├── citizen/         # Citizen dashboard, Create complaint
-│   ├── admin/           # Admin dashboard, Analytics, Manage users/departments
-│   ├── department/      # Department dashboard
-│   ├── worker/          # Worker dashboard, Tasks, Task execution
-│   ├── complaints/      # Complaints list, Complaint detail
-│   ├── LandingPage.tsx
-│   ├── ProfilePage.tsx
-│   ├── SettingsPage.tsx
-│   ├── MapViewPage.tsx
-│   └── NotFoundPage.tsx
-├── services/            # Supabase client, types, API layer, AI service, constants, utils, stats
-└── App.tsx              # Routes + providers
-
-supabase/
-└── functions/
-    └── analyze-complaint/   # AI analysis edge function
-```
-
----
-
-## Database Schema
-
-Managed via Supabase migrations (RLS enabled on every table):
-
-| Table | Purpose |
-|-------|---------|
-| `profiles` | Extends `auth.users` with role, name, phone, ward |
-| `departments` | 7 municipal departments |
-| `complaint_categories` | 13 issue categories with department mapping |
-| `workers` | Field worker profiles linked to departments |
-| `complaints` | Core complaint records with AI analysis fields |
-| `complaint_timeline` | Status-change audit trail |
-| `notifications` | In-app notifications (realtime) |
-| `feedback` | Citizen ratings on resolved complaints |
-
-### Row Level Security
-- Citizens see only their own complaints
-- Officers/admins see all complaints in scope
-- Workers see complaints assigned to them
-- Notifications are owner-scoped
-- A trigger auto-creates a `profiles` row on signup
-
----
-
-## AI Analysis
-
-The `analyze-complaint` Edge Function (Deno) receives the citizen's note, address, ward, GPS, and file name, then:
-
-1. **Detects category** — keyword scoring against all 13 categories
-2. **Estimates severity** — base severity per category, escalated by danger/urgency keywords
-3. **Predicts priority** — mapped from severity (low → low, critical → urgent)
-4. **Generates title & description** — templated from category + severity + location
-5. **Recommends department** — mapped from category
-6. **Detects duplicates** — queries nearby open complaints (same category, within 200m, last 48h)
-
----
-
-## API Layer
-
-All data access goes through `src/services/api.ts` which wraps the Supabase client:
-
-- `createComplaint` — inserts complaint + timeline entry + notification
-- `assignWorker` — updates complaint, adds timeline, notifies citizen + worker
-- `updateComplaintStatus` — updates status, timeline, notifies citizen
-- `completeWork` — marks resolved, stores after-photo + notes
-- `fetchComplaints` — with filters (status, department, worker, category, ward, search)
-- `uploadImage` — Supabase Storage public URL
-
----
-
-## Deployment
-
-### Frontend (Vite)
-The build outputs static files to `dist/`. Deploy to any static host (Vercel, Netlify, Cloudflare Pages):
+## Production Build
 
 ```bash
 npm run build
-# deploy dist/
 ```
 
-### Supabase
-The Supabase project is already provisioned. Migrations and the edge function are applied via the Supabase MCP tools. No manual database setup required.
+---
+
+# 🌟 Why JanSetu AI?
+
+- AI Powered Complaint Analysis
+- Smart City Ready
+- Fully Responsive
+- Real-time Notifications
+- Duplicate Complaint Detection
+- Interactive Maps
+- Analytics Dashboard
+- Secure Authentication
+- Role Based Access
+- Modern UI/UX
 
 ---
 
-## Sample Data
+# 🔮 Future Scope
 
-Departments and complaint categories are seeded automatically by the initial migration. To test the full flow:
-
-1. Sign up as a **Citizen** → report a complaint with a photo + GPS
-2. Sign up as a **Department Officer** (separate account) → assign a worker
-3. Sign up as a **Field Worker** → start the task, upload after photo, mark resolved
-4. Back as the citizen → leave feedback
+- AI Vision Based Image Detection
+- Voice Complaint Registration
+- WhatsApp Complaint Bot
+- Multilingual AI Assistant
+- Predictive Civic Analytics
+- IoT Smart City Integration
 
 ---
 
-## License
+# 👨‍💻 Team
 
-Built for hackathon demonstration purposes.
+## Team Name
+
+**A Square**
+
+### Team Leader
+
+Ashutosh Singh Yadav
+
+### Team Member
+
+Ashutosh Kumar Yadav
+
+---
+
+# 📜 License
+
+Built for **AI FIRST HACKATHON 2026** demonstration purposes.
+
+© 2026 Team A Square
