@@ -138,7 +138,8 @@ export async function createComplaint(input: {
     actor_id: input.user_id,
   });
   if (tlError) {
-    console.error('[createComplaint] timeline INSERT failed', tlError);
+    console.error('[createComplaint] timeline INSERT failed, rolling back complaint', tlError);
+    await supabase.from('complaints').delete().eq('id', complaint.id);
     throw supabaseError(tlError, 'Failed to create timeline entry');
   }
   console.info('[createComplaint] timeline entry created', { complaint_id: complaint.id });
@@ -151,7 +152,9 @@ export async function createComplaint(input: {
     complaint_id: complaint.id,
   });
   if (notifError) {
-    console.error('[createComplaint] notification INSERT failed', notifError);
+    console.error('[createComplaint] notification INSERT failed, rolling back complaint', notifError);
+    await supabase.from('complaint_timeline').delete().eq('complaint_id', complaint.id);
+    await supabase.from('complaints').delete().eq('id', complaint.id);
     throw supabaseError(notifError, 'Failed to create notification');
   }
   console.info('[createComplaint] notification created', { complaint_id: complaint.id });

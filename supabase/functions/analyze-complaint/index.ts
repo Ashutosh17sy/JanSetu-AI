@@ -252,26 +252,41 @@ Deno.serve(async (req: Request) => {
     if (body.latitude && body.longitude) {
       const lat = Number(body.latitude);
       const lng = Number(body.longitude);
-      const { data: recent, error: dupError } = await supabase
-        .from("complaints")
-        .select("id, latitude, longitude, created_at")
-        .eq("category_slug", cat.slug)
-        .gte("created_at", new Date(Date.now() - 1000 * 60 * 60 * 48).toISOString())
-        .neq("status", "resolved")
-        .neq("status", "rejected")
-        .limit(20);
-      if (dupError) {
-        console.error("[analyze-complaint] duplicate check query failed", dupError);
+      const since = new Date(Date.now() - 1000 * 60 * 60 * 48).toISOString();
+
+      const { data: timelineRows, error: tlQueryError } = await supabase
+        .from("complaint_timeline")
+        .select("complaint_id")
+        .gte("created_at", since);
+      if (tlQueryError) {
+        console.error("[analyze-complaint] timeline lookup failed", tlQueryError);
       }
-      if (recent && recent.length) {
-        for (const r of recent) {
-          if (r.latitude == null || r.longitude == null) continue;
-          const dLat = Number(r.latitude) - lat;
-          const dLng = Number(r.longitude) - lng;
-          const distM = Math.sqrt(dLat * dLat + dLng * dLng) * 111000;
-          if (distM < 200) {
-            duplicateOf = r.id;
-            break;
+      const fullySavedIds = timelineRows?.map((r) => r.complaint_id) ?? [];
+      if (fullySavedIds.length === 0) {
+        console.log("[analyze-complaint] no fully-saved complaints found, no duplicate check");
+      } else {
+        const { data: recent, error: dupError } = await supabase
+          .from("complaints")
+          .select("id, latitude, longitude, created_at")
+          .eq("category_slug", cat.slug)
+          .gte("created_at", since)
+          .neq("status", "resolved")
+          .neq("status", "rejected")
+          .in("id", fullySavedIds)
+          .limit(20);
+        if (dupError) {
+          console.error("[analyze-complaint] duplicate check query failed", dupError);
+        }
+        if (recent && recent.length) {
+          for (const r of recent) {
+            if (r.latitude == null || r.longitude == null) continue;
+            const dLat = Number(r.latitude) - lat;
+            const dLng = Number(r.longitude) - lng;
+            const distM = Math.sqrt(dLat * dLat + dLng * dLng) * 111000;
+            if (distM < 200) {
+              duplicateOf = r.id;
+              break;
+            }
           }
         }
       }
