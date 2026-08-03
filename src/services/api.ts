@@ -85,6 +85,18 @@ export async function createWorker(profileId: string, departmentId: string, ward
   return data as Worker;
 }
 
+function supabaseError(error: unknown, fallback: string): Error {
+  if (error && typeof error === 'object' && 'message' in error) {
+    const e = error as { message: string; code?: string; details?: string };
+    const parts = [e.message];
+    if (e.code) parts.push(`(code: ${e.code})`);
+    if (e.details) parts.push(`details: ${e.details}`);
+    return new Error(parts.join(' '));
+  }
+  if (error instanceof Error) return error;
+  return new Error(fallback);
+}
+
 export async function createComplaint(input: {
   user_id: string;
   category: string;
@@ -106,28 +118,43 @@ export async function createComplaint(input: {
   ward: string;
 }): Promise<Complaint> {
   const ticket = generateTicketNumber();
+  console.info('[createComplaint] inserting complaint', { ticket, category: input.category, user_id: input.user_id });
   const { data, error } = await supabase
     .from('complaints')
     .insert({ ...input, ticket_number: ticket, status: 'submitted' })
     .select('*, department:departments(*), assigned_worker:workers(*)')
     .single();
-  if (error) throw error;
+  if (error) {
+    console.error('[createComplaint] complaints INSERT failed', error);
+    throw supabaseError(error, 'Failed to create complaint record');
+  }
   const complaint = data as unknown as Complaint;
+  console.info('[createComplaint] complaint created', { id: complaint.id, ticket });
 
-  await supabase.from('complaint_timeline').insert({
+  const { error: tlError } = await supabase.from('complaint_timeline').insert({
     complaint_id: complaint.id,
     status: 'submitted',
     note: 'Complaint submitted by citizen.',
     actor_id: input.user_id,
   });
+  if (tlError) {
+    console.error('[createComplaint] timeline INSERT failed', tlError);
+    throw supabaseError(tlError, 'Failed to create timeline entry');
+  }
+  console.info('[createComplaint] timeline entry created', { complaint_id: complaint.id });
 
-  await supabase.from('notifications').insert({
+  const { error: notifError } = await supabase.from('notifications').insert({
     user_id: input.user_id,
     type: 'complaint_submitted',
     title: 'Complaint submitted',
     body: `Your complaint ${ticket} has been submitted and is under review.`,
     complaint_id: complaint.id,
   });
+  if (notifError) {
+    console.error('[createComplaint] notification INSERT failed', notifError);
+    throw supabaseError(notifError, 'Failed to create notification');
+  }
+  console.info('[createComplaint] notification created', { complaint_id: complaint.id });
 
   return complaint;
 }
@@ -345,7 +372,11 @@ export async function uploadImage(bucket: string, path: string, file: File): Pro
     cacheControl: '3600',
     upsert: true,
   });
-  if (error) throw error;
+  if (error) {
+    console.error('[uploadImage] storage upload failed', { bucket, path, error });
+    throw supabaseError(error, `Failed to upload image to ${bucket}`);
+  }
   const { data: pub } = supabase.storage.from(bucket).getPublicUrl(data.path);
+  console.info('[uploadImage] uploaded', { bucket, path, url: pub.publicUrl });
   return pub.publicUrl;
 }

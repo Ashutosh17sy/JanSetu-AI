@@ -132,7 +132,8 @@ export function CreateComplaintPage() {
       toast.success('Complaint submitted', `Ticket ${complaint.ticket_number} created.`);
       navigate(`/app/complaints/${complaint.id}`);
     } catch (err) {
-      const msg = err instanceof Error ? err.message : 'Submission failed.';
+      console.error('[CreateComplaintPage] submission error', err);
+      const msg = err instanceof Error ? err.message : 'An unexpected error occurred.';
       toast.error('Submission failed', msg);
     } finally {
       setSubmitting(false);

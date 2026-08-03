@@ -24,10 +24,15 @@ export async function analyzeComplaint(input: {
   });
   if (!res.ok) {
     const text = await res.text();
+    console.error('[analyzeComplaint] edge function returned error', { status: res.status, body: text });
     throw new Error(`AI analysis failed (${res.status}): ${text}`);
   }
   const data = await res.json();
-  if (data.error) throw new Error(data.error);
+  if (data.error) {
+    console.error('[analyzeComplaint] edge function returned error field', data.error);
+    throw new Error(data.error);
+  }
+  console.info('[analyzeComplaint] analysis result', data);
   return data as AIAnalysis;
 }
 
