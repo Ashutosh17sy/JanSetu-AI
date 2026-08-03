@@ -11,7 +11,7 @@ import { Badge } from '@/components/ui/Badge';
 import { LocationPicker } from '@/components/maps/Maps';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/useToast';
-import { analyzeComplaint } from '@/services/ai';
+import { analyzeComplaint, extractImageFeatures } from '@/services/ai';
 import { createComplaint, fetchDepartments, uploadImage } from '@/services/api';
 import { wardOf, classNames } from '@/services/utils';
 import { CATEGORIES } from '@/services/constants';
@@ -75,6 +75,7 @@ export function CreateComplaintPage() {
     }
     setPhase('analyzing');
     try {
+      const imageFeatures = file ? await extractImageFeatures(file) : null;
       const result = await analyzeComplaint({
         note,
         address,
@@ -82,6 +83,7 @@ export function CreateComplaintPage() {
         fileName: file?.name ?? '',
         latitude: location?.lat,
         longitude: location?.lng,
+        imageFeatures,
       });
       setAnalysis(result);
       setPhase('done');
