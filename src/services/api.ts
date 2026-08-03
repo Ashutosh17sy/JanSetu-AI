@@ -122,7 +122,7 @@ export async function createComplaint(input: {
   const { data, error } = await supabase
     .from('complaints')
     .insert({ ...input, ticket_number: ticket, status: 'submitted' })
-    .select('*, department:departments(*), assigned_worker:workers(*)')
+    .select('*, department:departments!complaints_department_id_fkey(*), assigned_worker:workers(*)')
     .single();
   if (error) {
     console.error('[createComplaint] complaints INSERT failed', error);
@@ -171,7 +171,7 @@ export async function fetchComplaints(filters?: {
 }): Promise<Complaint[]> {
   let q = supabase
     .from('complaints')
-    .select('*, department:departments(*), assigned_worker:workers(*, profile:profiles!workers_profile_id_fkey(*)), feedback:feedback(*)')
+    .select('*, department:departments!complaints_department_id_fkey(*), assigned_worker:workers(*, profile:profiles!workers_profile_id_fkey(*)), feedback:feedback(*)')
     .order('created_at', { ascending: false });
   if (filters?.status) q = q.eq('status', filters.status);
   if (filters?.departmentId) q = q.eq('department_id', filters.departmentId);
@@ -189,7 +189,7 @@ export async function fetchComplaints(filters?: {
 export async function fetchComplaintById(id: string): Promise<Complaint | null> {
   const { data, error } = await supabase
     .from('complaints')
-    .select('*, department:departments(*), assigned_worker:workers(*, profile:profiles!workers_profile_id_fkey(*)), feedback:feedback(*)')
+    .select('*, department:departments!complaints_department_id_fkey(*), assigned_worker:workers(*, profile:profiles!workers_profile_id_fkey(*)), feedback:feedback(*)')
     .eq('id', id)
     .maybeSingle();
   if (error) throw error;
